@@ -1,6 +1,9 @@
 import praw
 import configparser
 import time
+import schedule
+
+
 
 version = open("version.txt").readline()
 
@@ -12,6 +15,9 @@ response = "It looks like this post is about the use of 3d printing in a food ad
            "Or don't, I'm a bot, not a cop.\n\n---------------------------------\n\n" \
            "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
+config = configparser.ConfigParser()
+config.read("secrets")
+
 
 def current_seconds_time():
     return round(time.time())
@@ -21,18 +27,17 @@ def read_trigger_file(filename):
     return open(filename, 'r').read().split('\n')
 
 
-if __name__ == "__main__":
-    config = configparser.ConfigParser()
-    config.read("secrets")
+keywords = read_trigger_file("keywords.txt")
+summon = read_trigger_file("summon.txt")
+
+
+def poll():
+    timestamp_cutoff = current_seconds_time() - 10*60
+    print(timestamp_cutoff)
 
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
                          password=config['creds']['pass'], user_agent="foodsafebotV" + version,
                          username=config['creds']['user'])
-
-    keywords = read_trigger_file("keywords.txt")
-    summon = read_trigger_file("summon.txt")
-    timestamp_cutoff = current_seconds_time() - 10*60
-
     subreddit = reddit.subreddit("3dprinting")
 
     for submission in subreddit.new(limit=20):
@@ -51,3 +56,11 @@ if __name__ == "__main__":
         elif any(k in comment.body.lower() for k in keywords):
             print("Replying to comment " + str(comment))
             comment.reply(response)
+
+
+schedule.every(10).minutes.do(poll)
+
+if __name__ == "__main__":
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

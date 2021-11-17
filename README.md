@@ -9,3 +9,7 @@ Reminding everyone that 3d printing is not food safe, but can be, but isn't.
 ## Delete
 
 If I respond incorrectly, there's nothing you can do yet. Feature coming.
+
+## Setup
+
+`git update-index --skip-worktree secrets`
