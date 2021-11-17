@@ -7,5 +7,7 @@ if __name__ == "__main__":
     config.read("secrets")
 
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
-                         password="PASSWORD", user_agent="foodsafebotV" + version,
-                         username="USERNAME")
+                         password=config['creds']['pass'], user_agent="foodsafebotV" + version,
+                         username=config['creds']['user'])
+
+    reddit.subreddit("test").submit("Test Submission", url="https://reddit.com")
