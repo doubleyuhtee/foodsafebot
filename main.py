@@ -38,6 +38,9 @@ def poll():
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
                          password=config['creds']['pass'], user_agent="foodsafebotV" + version,
                          username=config['creds']['user'])
+    me = reddit.redditor(config['creds']['user'])
+    responded_to = [x.link_id for x in me.comments.new(limit=100)]
+    print(responded_to)
     subreddit = reddit.subreddit("3dprinting")
 
     for submission in subreddit.new(limit=20):
@@ -48,12 +51,14 @@ def poll():
             submission.reply(response)
 
     for comment in subreddit.comments(limit=100):
+        if comment.author.id == me.id:
+            continue
         if comment.created_utc < timestamp_cutoff:
             break
         if any(k in comment.body.lower() for k in summon):
             print("Replying to summon " + str(comment))
             comment.reply("I have been summoned! \n\n" + response)
-        elif any(k in comment.body.lower() for k in keywords):
+        elif any(k in comment.body.lower() for k in keywords) and comment.link_id not in responded_to:
             print("Replying to comment " + str(comment))
             comment.reply(response)
 
@@ -64,3 +69,4 @@ if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
+    # poll()
