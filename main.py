@@ -3,8 +3,6 @@ import configparser
 import time
 import schedule
 
-
-
 version = open("version.txt").readline()
 
 response = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n" \
@@ -24,11 +22,14 @@ def current_seconds_time():
 
 
 def read_trigger_file(filename):
-    return open(filename, 'r').read().split('\n')
+    resultset = set(x.lower() for x in open(filename, 'r').read().split('\n') if x.strip() != "")
+    print(resultset)
+    return resultset
 
 
 keywords = read_trigger_file("keywords.txt")
 summon = read_trigger_file("summon.txt")
+blockresponse = read_trigger_file("blockresponse.txt")
 
 
 def poll():
@@ -39,7 +40,7 @@ def poll():
                          password=config['creds']['pass'], user_agent="foodsafebotV" + version,
                          username=config['creds']['user'])
     me = reddit.redditor(config['creds']['user'])
-    responded_to = [x.link_id for x in me.comments.new(limit=100)]
+    responded_to = set([x.link_id for x in me.comments.new(limit=100)])
     print(responded_to)
     subreddit = reddit.subreddit("3dprinting")
 
@@ -47,20 +48,20 @@ def poll():
         if submission.created_utc < timestamp_cutoff:
             break
         if any(k in submission.title.lower() for k in keywords):
-            print("Replying to sumbmission " + submission)
-            submission.reply(response)
+            print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
+            # submission.reply(response)
 
     for comment in subreddit.comments(limit=100):
-        if comment.author.id == me.id:
+        if comment.author.id == me.id or any(b in blockresponse for b in comment.body.lower()) or any(b in blockresponse for b in comment.author.lower()):
             continue
         if comment.created_utc < timestamp_cutoff:
             break
         if any(k in comment.body.lower() for k in summon):
             print("Replying to summon " + str(comment))
-            comment.reply("I have been summoned! \n\n" + response)
+            # comment.reply("I have been summoned! \n\n" + response)
         elif any(k in comment.body.lower() for k in keywords) and comment.link_id not in responded_to:
-            print("Replying to comment " + str(comment))
-            comment.reply(response)
+            print("Replying to comment " + str(comment) + " " + str(comment.body))
+            # comment.reply(response)
 
 
 schedule.every(10).minutes.do(poll)
@@ -68,5 +69,5 @@ schedule.every(10).minutes.do(poll)
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(50)
     # poll()

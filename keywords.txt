@@ -1,5 +1,3 @@
 food safe
 food
-coffee
-spoon
-bowl
+
