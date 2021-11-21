@@ -2,6 +2,7 @@ import praw
 import configparser
 import time
 import schedule
+import re
 
 version = open("version.txt").readline()
 
@@ -27,13 +28,17 @@ def read_trigger_file(filename):
     return resultset
 
 
+def match_contents(text: str, matchset: set):
+    return any(re.search("\b" + k + "\b", text) for k in matchset)
+
+
 keywords = read_trigger_file("keywords.txt")
 summon = read_trigger_file("summon.txt")
 blockresponse = read_trigger_file("blockresponse.txt")
 
 
 def poll():
-    timestamp_cutoff = current_seconds_time() - 10*60
+    timestamp_cutoff = current_seconds_time() - 11*60
     print(timestamp_cutoff)
 
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
@@ -44,30 +49,36 @@ def poll():
     print(responded_to)
     subreddit = reddit.subreddit("3dprinting")
 
+    new_posts = 0
     for submission in subreddit.new(limit=20):
+        new_posts += 1
         if submission.created_utc < timestamp_cutoff:
             break
-        if any(k in submission.title.lower() for k in keywords):
+        if match_contents(submission.title.lower(), keywords):
             print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
-            # submission.reply(response)
+        #     # submission.reply(response)
 
+    new_comments = 0
     for comment in subreddit.comments(limit=100):
-        if comment.author.id == me.id or any(b in blockresponse for b in comment.body.lower()) or any(b in blockresponse for b in comment.author.lower()):
+        new_comments += 1
+        if comment.author.id == me.id or \
+                match_contents(comment.body.lower(), blockresponse) or \
+                match_contents(comment.author.name.lower(), blockresponse):
             continue
         if comment.created_utc < timestamp_cutoff:
             break
-        if any(k in comment.body.lower() for k in summon):
+        if match_contents(comment.body.lower(), summon):
             print("Replying to summon " + str(comment))
-            # comment.reply("I have been summoned! \n\n" + response)
-        elif any(k in comment.body.lower() for k in keywords) and comment.link_id not in responded_to:
+            comment.reply("I have been summoned! \n\n" + response)
+        elif match_contents(comment.body.lower(), keywords) and comment.link_id not in responded_to:
             print("Replying to comment " + str(comment) + " " + str(comment.body))
-            # comment.reply(response)
-
+        #     # comment.reply(response)
+    print(f"New posts: {new_posts} New Comments: {new_comments}")
 
 schedule.every(10).minutes.do(poll)
 
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
-        time.sleep(50)
+        time.sleep(60)
     # poll()
