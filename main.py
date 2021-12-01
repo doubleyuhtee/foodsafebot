@@ -2,11 +2,14 @@ import praw
 import configparser
 import time
 import schedule
+import re
 
 version = open("version.txt").readline()
 
-response = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n" \
-           "While PLA filament is considered food safe, the method of deposition leaves pockets that bacteria " \
+summon_prefix = "I have been summoned! \n\n"
+detected_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
+
+response = "While PLA filament is considered food safe, the method of deposition leaves pockets that bacteria " \
            "can grow in. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot " \
            "end into the plastics. Most resins are toxic in their liquid form and prolonged contact can deposit " \
            "trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer.\n\n" \
@@ -28,7 +31,8 @@ def read_trigger_file(filename):
 
 
 def match_contents(text: str, matchset: set):
-    return any(k in text.lower() for k in matchset)
+    test_string = text.replace("0", "o").replace("3", "e").replace("4", "a").replace("5", "s").replace("7", "t")
+    return any(re.search(f"\\b{k}\\b", test_string) for k in matchset)
 
 
 keywords = read_trigger_file("keywords.txt")
@@ -70,10 +74,10 @@ def poll():
                 break
             if match_contents(comment.body.lower(), summon):
                 print("Replying to summon " + str(comment))
-                comment.reply("I have been summoned! \n\n" + response)
+                comment.reply(summon_prefix + response)
             elif match_contents(comment.body.lower(), keywords) and comment.link_id not in responded_to:
                 print("Replying to comment " + str(comment) + " " + str(comment.body))
-                # comment.reply(response)
+                comment.reply(detected_prefix + response)
     print(f"New posts: {new_posts} New Comments: {new_comments}")
 
 schedule.every(10).minutes.do(poll)
