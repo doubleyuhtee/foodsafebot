@@ -78,7 +78,7 @@ def poll():
             elif match_contents(comment.body.lower(), keywords) and comment.link_id not in responded_to:
                 print("Replying to comment " + str(comment) + " " + str(comment.body))
                 comment.reply(detected_prefix + response)
-    print(f"New posts: {new_posts} New Comments: {new_comments}")
+        print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
 
 schedule.every(10).minutes.do(poll)
 
