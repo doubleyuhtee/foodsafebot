@@ -12,7 +12,7 @@ def permute_start_end(s: str, chars):
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
-        permutations = permute_start_end("test", ["", " ", ".", ". ", " ."])
+        permutations = permute_start_end("test", ["", " ", ".", ". ", " .", "(", ")"])
         for p in permutations:
             self.assertEqual(match_contents(p, {"test"}), True)
 

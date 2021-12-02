@@ -7,13 +7,16 @@ import re
 version = open("version.txt").readline()
 
 summon_prefix = "I have been summoned! \n\n"
-detected_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
+detected_prefix = "It looks like this comment is about the use of 3d printing in a food adjacent application!\n\n"
+detected_post_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
 
-response = "While PLA filament is considered food safe, the method of deposition leaves pockets that bacteria " \
-           "can grow in. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot " \
+response = "While PLA filament is considered food safe, the method of deposition leaves pockets where bacteria " \
+           "can grow. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot " \
            "end into the plastics. Most resins are toxic in their liquid form and prolonged contact can deposit " \
            "trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer.\n\n" \
-           "Or don't. I'm a bot, not a cop.\n\n---------------------------------\n\n" \
+           "Or don't. I'm a bot, not a cop.\n\n" \
+           "[Here is a relevant formlabs article](https://formlabs.com/blog/guide-to-food-safe-3d-printing/)\n\n" \
+           "---------------------------------\n\n" \
            "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
 config = configparser.ConfigParser()
@@ -61,7 +64,7 @@ def poll():
                 break
             if match_contents(submission.title.lower(), keywords):
                 print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
-            #     # submission.reply(response)
+                submission.reply(detected_post_prefix + response)
 
         new_comments = 0
         for comment in subreddit.comments(limit=200):
@@ -83,7 +86,7 @@ def poll():
 schedule.every(10).minutes.do(poll)
 
 if __name__ == "__main__":
-    poll()
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(60)
+    # poll()
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
