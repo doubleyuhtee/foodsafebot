@@ -3,5 +3,4 @@
 !foodsafe
 foodsafeprintbot
 foodsafebot
-foodsafe
 /u/foodsafeprintbot
