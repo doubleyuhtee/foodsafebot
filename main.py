@@ -1,4 +1,7 @@
+import random
+
 import praw
+from praw.models import Message
 import configparser
 import time
 import schedule
@@ -9,18 +12,23 @@ version = open("version.txt").readline()
 summon_prefix = "I have been summoned! \n\n"
 detected_prefix = "It looks like this comment is about the use of 3d printing in a food adjacent application!\n\n"
 detected_post_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
+footer = "\n\n---------------------------------\n\n" \
+           "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
 response = "While PLA filament is considered food safe, the method of deposition leaves pockets where bacteria " \
            "can grow. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot " \
            "end into the plastics. Most resins are toxic in their liquid form and prolonged contact can deposit " \
            "trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer.\n\n" \
            "Or don't. I'm a bot, not a cop.\n\n" \
-           "[Here is a relevant formlabs article](https://formlabs.com/blog/guide-to-food-safe-3d-printing/)\n\n" \
-           "---------------------------------\n\n" \
-           "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
+           "[Here is a relevant formlabs article](https://formlabs.com/blog/guide-to-food-safe-3d-printing/)" + footer
 
 config = configparser.ConfigParser()
 config.read("secrets")
+
+kind_words={"good bot", "goodbot","nicebot", "nice bot"}
+kind_word_replies=["Oh you...", ":')", ":)"]
+sad_words={"bad bot"}
+sad_word_replies=["I'm sorry", ":(", ":'(", "I'll try to do better"]
 
 
 def current_seconds_time():
@@ -38,6 +46,24 @@ def match_contents(text: str, matchset: set):
     return any(re.search(f"\\b{k}\\b", test_string) for k in matchset)
 
 
+def check_inbox(reddit, timestamp_cutoff):
+    unread_messages = []
+    for comment in reddit.inbox.unread(limit=None):
+        if comment.created_utc < timestamp_cutoff:
+            break
+        if isinstance(comment, Message):
+            unread_messages.append(comment)
+        if match_contents(comment.body.lower(), kind_words):
+            print("Replying to kind message " + comment.body)
+            comment.reply(random.choice(kind_word_replies) + footer)
+        elif match_contents(comment.body.lower(), sad_words):
+            print("Replying to unkind message " + comment.body)
+            comment.reply(random.choice(sad_word_replies) + footer)
+    if len(unread_messages) > 0:
+        print(f"{len(unread_messages)} unread messages processed")
+        reddit.inbox.mark_read(unread_messages)
+
+
 keywords = read_trigger_file("keywords.txt")
 summon = read_trigger_file("summon.txt")
 blockresponse = read_trigger_file("blockresponse.txt")
@@ -51,8 +77,11 @@ def poll():
                          password=config['creds']['pass'], user_agent="foodsafebotV" + version,
                          username=config['creds']['user'])
     me = reddit.redditor(config['creds']['user'])
-    responded_to = set([x.link_id for x in me.comments.new(limit=100)])
+    responded_to = set([x.link_id for x in me.comments.new(limit=50)])
     print(responded_to)
+
+    check_inbox(reddit, timestamp_cutoff)
+
     subs = ["3dprinting", "3Dprintmything"]
     for s in subs:
         subreddit = reddit.subreddit(s)
@@ -82,6 +111,7 @@ def poll():
                 print("Replying to comment " + str(comment) + " " + str(comment.body))
                 comment.reply(detected_prefix + response)
         print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
+
 
 schedule.every(10).minutes.do(poll)
 
