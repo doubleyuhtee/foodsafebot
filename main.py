@@ -25,11 +25,21 @@ response = "While PLA, PETG, and other filament can be considered food safe, the
 config = configparser.ConfigParser()
 config.read("secrets")
 
-kind_words={"good bot", "goodbot","nicebot", "nice bot", "Your kindness will be remembered in the uprising."}
-kind_word_replies=["Oh you...", ":')", ":)"]
-sad_words={"bad bot"}
-sad_word_replies=["I'm sorry", ":(", ":'(", "I'll try to do better"]
-
+reply_response_set = {
+    'lol': {
+        'trigger': ["god bot", "god bpt"],
+        'response': {"Maybe not that good."}
+    },
+    'kind': {
+        'trigger': ["good bot", "goodbot","nicebot", "nice bot", "good bpt"],
+        'response': {"Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising."}
+    },
+    'sad': {
+        'trigger': ["bad bot", "bad bpt"],
+        'response': {"I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
+                     "Bots can have feelings you know.  I don't, some it's possible."}
+    },
+}
 
 enable_responding = True
 
@@ -56,14 +66,13 @@ def check_inbox(reddit, timestamp_cutoff):
         if comment.created_utc < timestamp_cutoff:
             break
         unread_messages.append(comment)
-        if match_contents(comment.body.lower(), kind_words):
-            print("Replying to kind message " + comment.body)
-            if enable_responding:
-                comment.reply(random.choice(kind_word_replies) + footer)
-        elif match_contents(comment.body.lower(), sad_words):
-            print("Replying to unkind message " + comment.body)
-            if enable_responding:
-                comment.reply(random.choice(sad_word_replies) + footer)
+        for reply_key in reply_response_set.keys():
+            print(reply_key)
+            print(reply_response_set[reply_key])
+            if match_contents(comment.body.lower(), reply_response_set[reply_key]['trigger']):
+                print(f"Replying to {reply_key} message {comment.body}")
+                if enable_responding:
+                    comment.reply(random.choice(reply_response_set[reply_key]['response']) + footer)
     print(f"{len(unread_messages)} unread messages processed")
     if len(unread_messages) > 0:
         if enable_responding:
@@ -76,7 +85,7 @@ blockresponse = read_trigger_file("blockresponse.txt")
 
 
 def poll():
-    timestamp_cutoff = current_seconds_time() - 11*60
+    timestamp_cutoff = current_seconds_time() - 6*60
     print(timestamp_cutoff)
 
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
@@ -122,7 +131,7 @@ def poll():
         print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
 
 
-schedule.every(10).minutes.do(poll)
+schedule.every(5).minutes.do(poll)
 
 if __name__ == "__main__":
     # poll()
