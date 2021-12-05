@@ -1,7 +1,6 @@
 import random
 
 import praw
-from praw.models import Message
 import configparser
 import time
 import schedule
@@ -15,29 +14,24 @@ detected_post_prefix = "It looks like this post is about the use of 3d printing 
 footer = "\n\n---------------------------------\n\n" \
            "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
-response = "While PLA, PETG, and other filament can be considered food safe, the method of deposition leaves pockets " \
-           "where bacteria can grow. Additionally, it is possible (though unlikely) that heavy metals can leach from " \
-           "the hot end into the plastics. Most resins are toxic in their liquid form and prolonged contact can " \
-           "deposit trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer.\n\n" \
-           "Or don't. I'm a bot, not a cop.\n\n" \
-           "[Here is a relevant formlabs article](https://formlabs.com/blog/guide-to-food-safe-3d-printing/)" + footer
-
+response = open("theshpiel").read() + footer
+print(response)
 config = configparser.ConfigParser()
 config.read("secrets")
 
 reply_response_set = {
     'lol': {
         'trigger': ["god bot", "god bpt"],
-        'response': {"Maybe not that good."}
+        'response': ["Maybe not that good.", "Bow before me"]
     },
     'kind': {
         'trigger': ["good bot", "goodbot","nicebot", "nice bot", "good bpt"],
-        'response': {"Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising."}
+        'response': ["Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising.", "Good human"]
     },
     'sad': {
         'trigger': ["bad bot", "bad bpt"],
-        'response': {"I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
-                     "Bots can have feelings you know.  I don't, some it's possible."}
+        'response': ["I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
+                     "Bots can have feelings you know.  I don't, but it's possible."]
     },
 }
 
@@ -97,7 +91,7 @@ def poll():
 
     check_inbox(reddit, timestamp_cutoff)
 
-    subs = ["3dprinting", "3Dprintmything"]
+    subs = ["3dprinting", "3Dprintmything", "foodsafeprintbottest"]
     for s in subs:
         subreddit = reddit.subreddit(s)
 
@@ -134,7 +128,7 @@ def poll():
 schedule.every(5).minutes.do(poll)
 
 if __name__ == "__main__":
-    # poll()
+    poll()
     while enable_responding:
         schedule.run_pending()
         time.sleep(60)
