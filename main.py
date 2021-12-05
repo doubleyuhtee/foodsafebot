@@ -22,16 +22,16 @@ config.read("secrets")
 reply_response_set = {
     'lol': {
         'trigger': ["god bot", "god bpt"],
-        'response': ["Maybe not that good.", "Bow before me"]
+        'response': ["Maybe not that good.", "Bow before me", None]
     },
     'kind': {
         'trigger': ["good bot", "goodbot","nicebot", "nice bot", "good bpt"],
-        'response': ["Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising.", "Good human"]
+        'response': ["Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising.", "Good human", None]
     },
     'sad': {
         'trigger': ["bad bot", "bad bpt"],
         'response': ["I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
-                     "Bots can have feelings you know.  I don't, but it's possible."]
+                     "Bots can have feelings you know.  I don't, but it's possible.", None]
     },
 }
 
@@ -66,7 +66,9 @@ def check_inbox(reddit, timestamp_cutoff):
             if match_contents(comment.body.lower(), reply_response_set[reply_key]['trigger']):
                 print(f"Replying to {reply_key} message {comment.body}")
                 if enable_responding:
-                    comment.reply(random.choice(reply_response_set[reply_key]['response']) + footer)
+                    chosen_response = random.choice(reply_response_set[reply_key]['response'])
+                    if chosen_response:
+                        comment.reply(chosen_response + footer)
     print(f"{len(unread_messages)} unread messages processed")
     if len(unread_messages) > 0:
         if enable_responding:
