@@ -6,6 +6,8 @@ import time
 import schedule
 import re
 
+from keywords import shpiel_keywords
+
 version = open("version.txt").readline()
 
 summon_prefix = "I have been summoned! \n\n"
@@ -68,14 +70,13 @@ def check_inbox(reddit, timestamp_cutoff):
                 if enable_responding:
                     chosen_response = random.choice(reply_response_set[reply_key]['response'])
                     if chosen_response:
-                        comment.reply(chosen_response + footer)
+                        comment.reply(response + footer)
     print(f"{len(unread_messages)} unread messages processed")
     if len(unread_messages) > 0:
         if enable_responding:
             reddit.inbox.mark_read(unread_messages)
 
 
-keywords = read_trigger_file("keywords.txt")
 summon = read_trigger_file("summon.txt")
 blockresponse = read_trigger_file("blockresponse.txt")
 
@@ -102,7 +103,7 @@ def poll():
             new_posts += 1
             if submission.created_utc < timestamp_cutoff:
                 break
-            if match_contents(submission.title.lower(), keywords):
+            if shpiel_keywords.check(submission.title):
                 print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
                 if enable_responding:
                     submission.reply(detected_post_prefix + response)
@@ -120,7 +121,7 @@ def poll():
                 print("Replying to summon " + str(comment))
                 if enable_responding:
                     comment.reply(summon_prefix + response)
-            elif match_contents(comment.body.lower(), keywords) and comment.link_id not in responded_to:
+            elif shpiel_keywords.check(comment.body) and comment.link_id not in responded_to:
                 print("Replying to comment " + str(comment) + " " + str(comment.body))
                 if enable_responding:
                     comment.reply(detected_prefix + response)
