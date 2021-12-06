@@ -63,14 +63,12 @@ def check_inbox(reddit, timestamp_cutoff):
             break
         unread_messages.append(comment)
         for reply_key in reply_response_set.keys():
-            print(reply_key)
-            print(reply_response_set[reply_key])
             if match_contents(comment.body.lower(), reply_response_set[reply_key]['trigger']):
                 print(f"Replying to {reply_key} message {comment.body}")
                 if enable_responding:
                     chosen_response = random.choice(reply_response_set[reply_key]['response'])
                     if chosen_response:
-                        comment.reply(response + footer)
+                        comment.reply(chosen_response + footer)
     print(f"{len(unread_messages)} unread messages processed")
     if len(unread_messages) > 0:
         if enable_responding:
@@ -103,7 +101,7 @@ def poll():
             new_posts += 1
             if submission.created_utc < timestamp_cutoff:
                 break
-            if shpiel_keywords.check(submission.title):
+            if shpiel_keywords.check(submission.title) and submission not in responded_to:
                 print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
                 if enable_responding:
                     submission.reply(detected_post_prefix + response)
