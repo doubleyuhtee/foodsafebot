@@ -13,14 +13,17 @@ class Trigger:
         self.fullText = full_text
         self.fullTextRatio = full_text_ratio
 
-    def check(self, test_text: str):
-        test_text_lower = test_text\
-            .replace("0", "o") \
+    @staticmethod
+    def normalize_test_string(s: str):
+        return s.replace("0", "o") \
             .replace("3", "e") \
             .replace("4", "a") \
             .replace("5", "s") \
             .replace("7", "t") \
             .lower()
+
+    def check(self, test_text: str):
+        test_text_lower = self.normalize_test_string(test_text)
         log.debug("Checking " + str(test_text_lower))
         return self.matchMethod.check(test_text_lower)
 

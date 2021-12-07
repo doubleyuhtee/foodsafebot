@@ -1,7 +1,7 @@
 import unittest
 
 from textmatch import *
-from keywords import shpiel_keywords
+from keywords import shpiel_keywords, summon_keywords
 
 
 class MyTestCase(unittest.TestCase):
@@ -9,6 +9,11 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(shpiel_keywords.check("that's not food safe"))
         self.assertTrue(shpiel_keywords.check("that's not f00d s4f3"))
         self.assertFalse(shpiel_keywords.check("use a sealer to make that food safe"))
+
+    def test_summon_keywords(self):
+        self.assertTrue(summon_keywords.check("foodsafeprintbot"))
+        self.assertFalse(summon_keywords.check("foodsafeprintbot b0trank"))
+        self.assertFalse(summon_keywords.check("voting on FoodSafePrintBot."))
 
     def test_something(self):
         self.assertEqual(True, Trigger(And("hello", "goodbye")).check("hello goodbye"))

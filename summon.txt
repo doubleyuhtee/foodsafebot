@@ -1,6 +1,0 @@
-!foodsafeprintbot
-!foodsafebot
-!foodsafe
-foodsafeprintbot
-foodsafebot
-/u/foodsafeprintbot

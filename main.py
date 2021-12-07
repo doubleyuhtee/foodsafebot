@@ -6,7 +6,7 @@ import time
 import schedule
 import re
 
-from keywords import shpiel_keywords
+from keywords import shpiel_keywords, summon_keywords
 
 version = open("version.txt").readline()
 
@@ -35,6 +35,10 @@ reply_response_set = {
         'response': ["I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
                      "Bots can have feelings you know.  I don't, but it's possible.", None]
     },
+    'polite': {
+        'trigger': ["thank you", "thanks"],
+        'response': ["You're welcome", None]
+    }
 }
 
 enable_responding = True
@@ -75,10 +79,6 @@ def check_inbox(reddit, timestamp_cutoff):
             reddit.inbox.mark_read(unread_messages)
 
 
-summon = read_trigger_file("summon.txt")
-blockresponse = read_trigger_file("blockresponse.txt")
-
-
 def poll():
     timestamp_cutoff = current_seconds_time() - 6*60
     print(timestamp_cutoff)
@@ -109,13 +109,11 @@ def poll():
         new_comments = 0
         for comment in subreddit.comments(limit=200):
             new_comments += 1
-            if comment.author.id == me.id or \
-                    match_contents(comment.body.lower(), blockresponse) or \
-                    match_contents(comment.author.name.lower(), blockresponse):
+            if comment.author.id == me.id:
                 continue
             if comment.created_utc < timestamp_cutoff:
                 break
-            if match_contents(comment.body.lower(), summon):
+            if summon_keywords.check(comment.body.lower()):
                 print("Replying to summon " + str(comment))
                 if enable_responding:
                     comment.reply(summon_prefix + response)
