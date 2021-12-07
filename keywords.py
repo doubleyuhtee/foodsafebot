@@ -2,7 +2,7 @@ from textmatcher.textmatch import *
 
 shpiel_keywords = Trigger(
     And(
-        Not(Or("seal", "sealer")),
+        Not(Or("seal", "sealer", "ceramic")),
         Or("foodsafe", "foodsafety", And("food", Or("safe", "safety")))
     ))
 
