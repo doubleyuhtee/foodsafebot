@@ -1,3 +1,4 @@
+import json
 import random
 
 import praw
@@ -14,7 +15,7 @@ summon_prefix = "I have been summoned! \n\n"
 detected_prefix = "It looks like this comment is about the use of 3d printing in a food adjacent application!\n\n"
 detected_post_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
 footer = "\n\n---------------------------------\n\n" \
-           "^(FoodSafeBot V" + version + " I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
+           "^(FoodSafeBot V" + version + ". Summon me with !FoodSafe. I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
 response = open("theshpiel").read() + footer
 print(response)
@@ -73,7 +74,7 @@ def check_inbox(reddit, timestamp_cutoff):
                     chosen_response = random.choice(reply_response_set[reply_key]['response'])
                     if chosen_response:
                         comment.reply(chosen_response + footer)
-    print(f"{len(unread_messages)} unread messages processed")
+    # print(f"{len(unread_messages)} unread messages processed")
     if len(unread_messages) > 0:
         if enable_responding:
             reddit.inbox.mark_read(unread_messages)
@@ -88,7 +89,7 @@ def poll():
                          username=config['creds']['user'])
     me = reddit.redditor(config['creds']['user'])
     responded_to = set([x.link_id for x in me.comments.new(limit=50)])
-    print(responded_to)
+    # print(responded_to)
 
     check_inbox(reddit, timestamp_cutoff)
 
@@ -101,7 +102,9 @@ def poll():
             new_posts += 1
             if submission.created_utc < timestamp_cutoff:
                 break
-            if shpiel_keywords.check(submission.title) and submission not in responded_to:
+            if (shpiel_keywords.check(submission.title) or
+                (submission.selftext and shpiel_keywords.check(submission.selftext))) and\
+                    submission not in responded_to:
                 print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
                 if enable_responding:
                     submission.reply(detected_post_prefix + response)
@@ -121,7 +124,7 @@ def poll():
                 print("Replying to comment " + str(comment) + " " + str(comment.body))
                 if enable_responding:
                     comment.reply(detected_prefix + response)
-        print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
+        # print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
 
 
 schedule.every(5).minutes.do(poll)
