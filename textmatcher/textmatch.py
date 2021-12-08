@@ -25,7 +25,8 @@ class Trigger:
     def check(self, test_text: str):
         test_text_lower = self.normalize_test_string(test_text)
         log.debug("Checking " + str(test_text_lower))
-        return self.matchMethod.check(test_text_lower)
+        chunks = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", test_text_lower)
+        return any(self.matchMethod.check(x) for x in chunks)
 
 
 class And:

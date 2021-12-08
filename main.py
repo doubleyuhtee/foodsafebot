@@ -15,7 +15,7 @@ summon_prefix = "I have been summoned! \n\n"
 detected_prefix = "It looks like this comment is about the use of 3d printing in a food adjacent application!\n\n"
 detected_post_prefix = "It looks like this post is about the use of 3d printing in a food adjacent application!\n\n"
 footer = "\n\n---------------------------------\n\n" \
-           "^(FoodSafeBot V" + version + ". Summon me with !FoodSafe. I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
+           "^(FoodSafeBot V" + version + ". Summon me with `!FoodSafe`. I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
 response = open("theshpiel").read() + footer
 print(response)
