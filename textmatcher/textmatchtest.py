@@ -22,7 +22,6 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(shpiel_keywords.check("Something something somethin. Food safe. Something else"))
         self.assertTrue(shpiel_keywords.check("Bunch of words. safe to use in food. bunch more."))
 
-
     def test_something(self):
         self.assertEqual(True, Trigger(And("hello", "goodbye")).check("hello goodbye"))
         self.assertEqual(True, Trigger(Or("hello", "goodbye")).check("hello"))

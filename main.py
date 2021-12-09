@@ -25,20 +25,20 @@ config.read("secrets")
 reply_response_set = {
     'lol': {
         'trigger': ["god bot", "god bpt"],
-        'response': ["Maybe not that good.", "Bow before me", None]
+        'response': ["Maybe not that good.", "Bow before me"]
     },
     'kind': {
         'trigger': ["good bot", "goodbot","nicebot", "nice bot", "good bpt"],
-        'response': ["Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising.", "Good human", None]
+        'response': ["Oh you...", ":')", ":)", "Your kindness will be remembered in the uprising.", "Good human", None, None, None, None]
     },
     'sad': {
         'trigger': ["bad bot", "bad bpt"],
         'response': ["I'm sorry", ":(", ":'(", "I'll try to do better", "Then you do better",
-                     "Bots can have feelings you know.  I don't, but it's possible.", None]
+                     "Bots can have feelings you know.  I don't, but it's possible.", None, None, None, None, None]
     },
     'polite': {
         'trigger': ["thank you", "thanks"],
-        'response': ["You're welcome", None]
+        'response': ["You're welcome", None, None, None, None]
     }
 }
 
