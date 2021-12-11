@@ -18,7 +18,7 @@ footer = "\n\n---------------------------------\n\n" \
            "^(FoodSafeBot V" + version + ". Summon me with `!FoodSafe`. I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
 response = open("theshpiel").read() + footer
-print(response)
+# print(response)
 config = configparser.ConfigParser()
 config.read("secrets")
 
@@ -51,7 +51,7 @@ def current_seconds_time():
 
 def read_trigger_file(filename):
     resultset = set(x.lower() for x in open(filename, 'r').read().split('\n') if x.strip() != "")
-    print(resultset)
+    # print(resultset)
     return resultset
 
 
@@ -63,13 +63,13 @@ def match_contents(text: str, matchset: set):
 def check_inbox(reddit, timestamp_cutoff):
     unread_messages = []
     for comment in reddit.inbox.unread(limit=20):
-        print(comment.body)
+        # print(comment.body)
         if comment.created_utc < timestamp_cutoff:
             break
         unread_messages.append(comment)
         for reply_key in reply_response_set.keys():
             if match_contents(comment.body.lower(), reply_response_set[reply_key]['trigger']):
-                print(f"Replying to {reply_key} message {comment.body}")
+                # print(f"Replying to {reply_key} message {comment.body}")
                 if enable_responding:
                     chosen_response = random.choice(reply_response_set[reply_key]['response'])
                     if chosen_response:
@@ -82,7 +82,7 @@ def check_inbox(reddit, timestamp_cutoff):
 
 def poll():
     timestamp_cutoff = current_seconds_time() - 6*60
-    print(timestamp_cutoff)
+    # print(timestamp_cutoff)
 
     reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
                          password=config['creds']['pass'], user_agent="foodsafebotV" + version,
@@ -105,9 +105,10 @@ def poll():
             if (shpiel_keywords.check(submission.title) or
                 (submission.selftext and shpiel_keywords.check(submission.selftext))) and\
                     submission not in responded_to:
-                print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
+                # print("Replying to sumbmission " + str(submission) + " " + str(submission.title))
                 if enable_responding:
                     submission.reply(detected_post_prefix + response)
+                    responded_to.add(str(submission))
 
         new_comments = 0
         for comment in subreddit.comments(limit=200):
@@ -117,13 +118,15 @@ def poll():
             if comment.created_utc < timestamp_cutoff:
                 break
             if summon_keywords.check(comment.body.lower()):
-                print("Replying to summon " + str(comment))
+                # print("Replying to summon " + str(comment))
                 if enable_responding:
                     comment.reply(summon_prefix + response)
+                    responded_to.add(str(comment.link_id))
             elif shpiel_keywords.check(comment.body) and comment.link_id not in responded_to:
-                print("Replying to comment " + str(comment) + " " + str(comment.body))
+                # print("Replying to comment " + str(comment) + " " + str(comment.body))
                 if enable_responding:
                     comment.reply(detected_prefix + response)
+                    responded_to.add(str(comment.link_id))
         # print(f"{s} New posts: {new_posts} New Comments: {new_comments}")
 
 
