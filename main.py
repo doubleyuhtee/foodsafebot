@@ -1,4 +1,5 @@
 import json
+import os
 import random
 
 import praw
@@ -80,14 +81,24 @@ def check_inbox(reddit, timestamp_cutoff):
             reddit.inbox.mark_read(unread_messages)
 
 
+def get_secret(secret_config, name, env_name):
+    return secret_config[name] if name in secret_config and secret_config[name] else os.environ.get(env_name)
+
+
 def poll():
+    env_config = config['creds']
+    user_id = get_secret(env_config, "id", "user_id")
+    user_secret = get_secret(env_config, "secret", "user_secret")
+    user_user = get_secret(env_config, "user", "user_user")
+    user_pass = get_secret(env_config, "pass", "user_pass")
+
     timestamp_cutoff = current_seconds_time() - 6*60
     # print(timestamp_cutoff)
 
-    reddit = praw.Reddit(client_id=config['creds']['id'], client_secret=config['creds']['secret'],
-                         password=config['creds']['pass'], user_agent="foodsafebotV" + version,
-                         username=config['creds']['user'])
-    me = reddit.redditor(config['creds']['user'])
+    reddit = praw.Reddit(client_id=user_id, client_secret=user_secret,
+                         password=user_pass, user_agent=user_user.lower() + "V" + version,
+                         username=user_user)
+    me = reddit.redditor(user_user)
     responded_to = set([x.link_id for x in me.comments.new(limit=50)])
     # print(responded_to)
 
@@ -109,6 +120,9 @@ def poll():
                 if enable_responding:
                     submission.reply(detected_post_prefix + response)
                     responded_to.add(str(submission))
+
+        me = reddit.redditor(user_user)
+        responded_to = set([x.link_id for x in me.comments.new(limit=50)])
 
         new_comments = 0
         for comment in subreddit.comments(limit=200):
