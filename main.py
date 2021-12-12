@@ -93,7 +93,7 @@ def poll():
     user_pass = get_secret(env_config, "pass", "user_pass")
 
     timestamp_cutoff = current_seconds_time() - 6*60
-    # print(timestamp_cutoff)
+    print(timestamp_cutoff)
 
     reddit = praw.Reddit(client_id=user_id, client_secret=user_secret,
                          password=user_pass, user_agent=user_user.lower() + "V" + version,
