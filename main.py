@@ -91,6 +91,8 @@ def poll():
     user_secret = get_secret(env_config, "secret", "user_secret")
     user_user = get_secret(env_config, "user", "user_user")
     user_pass = get_secret(env_config, "pass", "user_pass")
+    print("Got some sshit")
+    print(f"{user_id} {user_user}")
 
     timestamp_cutoff = current_seconds_time() - 6*60
     print(timestamp_cutoff)
@@ -100,7 +102,7 @@ def poll():
                          username=user_user)
     me = reddit.redditor(user_user)
     responded_to = set([x.link_id for x in me.comments.new(limit=50)])
-    # print(responded_to)
+    print(responded_to)
 
     check_inbox(reddit, timestamp_cutoff)
 
@@ -147,7 +149,9 @@ def poll():
 schedule.every(5).minutes.do(poll)
 
 if __name__ == "__main__":
+    print("Starting")
     poll()
+    print("Finished priming")
     while enable_responding:
         schedule.run_pending()
         time.sleep(60)
