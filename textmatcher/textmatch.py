@@ -38,7 +38,7 @@ class And:
         res = True
         for t in self.triggers:
             if type(t) is str:
-                res &= bool(re.search(f"\\b{t}\\b", message))
+                res &= bool(re.search(f"!?{t}\\b", message))
             else:
                 res &= t.check(message)
                 if not res:
@@ -55,7 +55,7 @@ class Or:
         res = False
         for t in self.triggers:
             if type(t) is str:
-                res |= bool(re.search(f"\\b{t}\\b", message))
+                res |= bool(re.search(f"!?{t}\\b", message))
             else:
                 res |= t.check(message)
             if res:
@@ -72,7 +72,7 @@ class Not:
     def check(self, message) -> bool:
         log.debug("Checking Not " + str(len(self.triggers)))
         if type(self.triggers[0]) is str:
-            res = not re.search(f"\\b{self.triggers[0]}\\b", message)
+            res = not re.search(f"!?{self.triggers[0]}\\b", message)
         else:
             res = not self.triggers[0].check(message)
 

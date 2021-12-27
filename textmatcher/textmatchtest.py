@@ -12,6 +12,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_summon_keywords(self):
         self.assertTrue(summon_keywords.check("foodsafeprintbot"))
+        self.assertTrue(summon_keywords.check("!foodsafe"))
         self.assertFalse(summon_keywords.check("foodsafeprintbot b0trank"))
         self.assertFalse(summon_keywords.check("voting on FoodSafePrintBot."))
 
