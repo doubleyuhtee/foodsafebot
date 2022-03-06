@@ -104,7 +104,7 @@ def poll():
 
     check_inbox(reddit, timestamp_cutoff)
 
-    subs = ["3dprinting", "3Dprintmything", "foodsafeprintbottest"]
+    subs = ["3dprinting", "3Dprintmything", "functionalprint", "foodsafeprintbottest"]
     for s in subs:
         subreddit = reddit.subreddit(s)
 
