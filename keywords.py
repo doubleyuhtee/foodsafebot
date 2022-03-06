@@ -10,6 +10,7 @@ shpiel_keywords = Trigger(
 summon_keywords = Trigger(
     And(
         Or("/u/foodsafeprintbot",
+           "u/foodsafeprintbot"
            "!foodsafe",
            "!foodsafebot",
            "!foodsafeprint",
