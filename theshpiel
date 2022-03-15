@@ -2,6 +2,10 @@ The United States Food and Drug administration doesn't actually have a definitio
 
 The classification for PLA was granted "with no limitation other than current good manufacturing practice", which at the time did not include 3d printing.  The method of deposition leaves pockets where bacteria can grow. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot end into the plastics. Most resins are toxic in their liquid form and prolonged contact can deposit trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer or glaze.
 
+Beyond issues the the plastics themselves, new nozzles can come with a coating (often PFTE) to prevent blobs from sticking.  The abrasives in the filament can wear this coating down and while it is safe for food to contact like on a frying pan, [the worn down products are not.](https://pubmed.ncbi.nlm.nih.gov/28913736/).  It also wears the nozzle and metal particles can end up in the print. While copper and zinc (the ingredients for brass) are necessary in trace amounts, in larger amounts it can cause illness.
+
 Or don't. I'm a bot, not a cop.
 
 [Here is a relevant formlabs article](https://formlabs.com/blog/guide-to-food-safe-3d-printing/) and a [2010 material study](https://ift.onlinelibrary.wiley.com/doi/full/10.1111/j.1541-4337.2010.00126.x)
+
+TL;DR: Not good
