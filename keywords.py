@@ -2,9 +2,8 @@ from textmatcher.textmatch import *
 
 shpiel_keywords = Trigger(
     And(
-        Not(Or("seal", "sealer", "ceramic", "formlabs.com/blog/", "http://")),
-        Or("cookie cutter", "cookiecutters", "cookiecutter", "cookie cutters",
-           "foodsafe", "foodsafety", And("food", Or("safe", "safety")))
+        Not(Or("seal", "sealer", "ceramic", "formlabs.com/blog/", "http://", "plastic wrap")),
+        Or("cookie cutter", "cookiecutters", "cookiecutter", "cookie cutters")
     ))
 
 summon_keywords = Trigger(
