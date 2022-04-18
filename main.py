@@ -131,7 +131,7 @@ def poll():
                 continue
             if comment.created_utc < timestamp_cutoff:
                 break
-            if summon_keywords.check(comment.body.lower()):
+            if summon_keywords.check(comment.body.lower()) or comment.body.lower() == '!foodsafe':
                 # print("Replying to summon " + str(comment))
                 if enable_responding:
                     comment.reply(summon_prefix + response)
