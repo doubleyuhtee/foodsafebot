@@ -10,7 +10,7 @@ import re
 
 from keywords import shpiel_keywords, summon_keywords
 
-version = open("version.txt").readline()
+version = open("version.txt").readline().strip()
 
 summon_prefix = "I have been summoned! \n\n"
 detected_prefix = "It looks like this comment is about the use of 3d printing in a food adjacent application!\n\n"
@@ -87,10 +87,10 @@ def get_secret(secret_config, name, env_name):
 
 def poll():
     env_config = config['creds']
-    user_id = get_secret(env_config, "id", "user_id")
-    user_secret = get_secret(env_config, "secret", "user_secret")
-    user_user = get_secret(env_config, "user", "user_user")
-    user_pass = get_secret(env_config, "pass", "user_pass")
+    user_id = get_secret(env_config, "id", "user_id").strip()
+    user_secret = get_secret(env_config, "secret", "user_secret").strip()
+    user_user = get_secret(env_config, "user", "user_user").strip()
+    user_pass = get_secret(env_config, "pass", "user_pass").strip()
 
     timestamp_cutoff = current_seconds_time() - 6*60
     # print(timestamp_cutoff)
