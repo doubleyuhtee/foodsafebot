@@ -18,7 +18,7 @@ detected_post_prefix = "It looks like this post is about the use of 3d printing 
 footer = "\n\n---------------------------------\n\n" \
            "^(FoodSafeBot V" + version + ". Summon me with `!FoodSafe`. I'm made of) ^[code](https://github.com/doubleyuhtee/foodsafebot)"
 
-response = open("theshpiel").read() + footer
+response = open("theshpiel.txt").read() + footer
 # print(response)
 config = configparser.ConfigParser()
 config.read("secrets")
