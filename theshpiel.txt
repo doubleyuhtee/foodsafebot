@@ -2,7 +2,7 @@
 
 While [PolyLactic Acid (PLA)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=184.1061) and [Polyethylene](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=177.1630) [(+Glycol)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=172.820) has been classified as Generally Regarded As Safe (GRAS). There's a lot of uncertainty around the process of additive manufacturing.
 
-Some (testing)[https://hackaday.com/2022/09/05/food-safe-3d-printing-a-study/] shows that the layer lines are big enough that bacteria don't hide inside as much as expected.  Additionally, it's not nearly as porous as initally expected.  Some soap and water with scrubbing is enough to clean most of it out and a quick wash with a bleach solution can bring it up to almost medical standards.
+Some [testing](https://hackaday.com/2022/09/05/food-safe-3d-printing-a-study/) shows that the layer lines are big enough that bacteria don't hide inside as much as expected.  Additionally, it's not nearly as porous as initally expected.  Some soap and water with scrubbing is enough to clean most of it out and a quick wash with a bleach solution can bring it up to almost medical standards.
 
 This does not take into account material impurities. New nozzles can come with a coating (often PTFE) to prevent blobs from sticking.  The abrasives in the filament can wear this coating down and while it is safe for food to contact like on a frying pan, [the worn down products are not.](https://pubmed.ncbi.nlm.nih.gov/28913736/).  It also wears the nozzle and metal particles can end up in the print.
 
