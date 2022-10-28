@@ -16,8 +16,16 @@ If I respond incorrectly, there's nothing you can do yet. Feature coming.
 
 ## Included text
 
-I have been summoned!
 
+While [PolyLactic Acid (PLA)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=184.1061) and [Polyethylene](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=177.1630) [(+Glycol)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=172.820) has been classified as Generally Regarded As Safe (GRAS). There's a lot of uncertainty around the process of additive manufacturing.
+
+Some [testing](https://hackaday.com/2022/09/05/food-safe-3d-printing-a-study/) shows that the layer lines are big enough that bacteria don't hide inside as much as expected.  Additionally, it's not nearly as porous as initally expected.  Some soap and water with scrubbing is enough to clean most of it out and a quick wash with a bleach solution can bring it up to almost medical standards.
+
+This does not take into account material impurities. New nozzles can come with a coating (often PTFE) to prevent blobs from sticking.  The abrasives in the filament can wear this coating down and while it is safe for food to contact like on a frying pan, [the worn down products are not.](https://pubmed.ncbi.nlm.nih.gov/28913736/).  It also wears the nozzle and metal particles can end up in the print.
+
+TL;DR: Use a sealer. Or don't. I'm a bot, not a cop.
+
+### Old text
 The United States Food and Drug administration doesn't actually have a definition for "Food Safe". The classification is Generally Regarded as Safe (GRAS). While [PLA](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=184.1061), and many forms of [Polyethylene (PET)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=177.1630) including [Polyethylene glycol (PETG)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=172.820) have these classifications, they are for the raw materials, not pigments or additives that are used to make it "silky" or have other properties.
 
 The classification for PLA was granted "with no limitation other than current good manufacturing practice", which at the time did not include 3d printing. The method of deposition leaves pockets where bacteria can grow. Additionally, it is possible (though unlikely) that heavy metals can leach from the hot end into the plastics. Most resins are toxic in their liquid form and prolonged contact can deposit trace chemicals. For these reasons, it's recommended you use a food safe epoxy sealer or glaze.
