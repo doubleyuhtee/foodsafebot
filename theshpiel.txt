@@ -7,3 +7,5 @@ Some [testing](https://hackaday.com/2022/09/05/food-safe-3d-printing-a-study/) s
 This does not take into account material impurities. New nozzles can come with a coating (often PTFE) to prevent blobs from sticking.  The abrasives in the filament can wear this coating down and while it is safe for food to contact like on a frying pan, [the worn down products are not.](https://pubmed.ncbi.nlm.nih.gov/28913736/).  It also wears the nozzle and metal particles can end up in the print.
 
 TL;DR: Use a sealer. Or don't. I'm a bot, not a cop.
+
+https://formlabs.com/blog/guide-to-food-safe-3d-printing/
